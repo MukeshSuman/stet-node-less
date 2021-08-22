@@ -1,0 +1,27 @@
+{
+  "name": "stet-node-less",
+  "version": "1.0.0",
+  "description": "Small service for data fetch",
+  "main": "index.js",
+  "engines": {
+    "node": "16.x"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MukeshSuman/stet-node-less.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MukeshSuman/stet-node-less/issues"
+  },
+  "homepage": "https://github.com/MukeshSuman/stet-node-less#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
