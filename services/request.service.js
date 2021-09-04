@@ -32,7 +32,7 @@ const GetData = async (END_POINT) =>
           if (response.statusCode == 200 || response.statusCode == "200") {
             if (body) {
               let tempBody = JSON.parse(body);
-              console.log("body", tempBody.data);
+              // console.log("body", tempBody.data);
               resolve(tempBody.data);
             } else {
               reject({ data: body, message: response });
@@ -79,7 +79,7 @@ const CreateData = async (END_POINT, data) =>
           if (response.statusCode == 200 || response.statusCode == "200") {
             if (body) {
               let tempBody = JSON.parse(body);
-              console.log("body", tempBody.data);
+              // console.log("body", tempBody.data);
               resolve(tempBody.data);
             } else {
               reject({ data: body, message: response });
