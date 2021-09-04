@@ -718,7 +718,10 @@ const stetUpdateWorkingInfo = async () =>
   new Promise(async (resolve, reject) => {
     try {
       await setLocalObj();
-      const workingInfoRes = await getWorkingInfo();
+      const wIRes = await getWorkingInfo();
+      if (wIRes && wIRes.workingInfoRes) {
+        await Json.updateJson("workingInfo", wIRes.workingInfoRes);
+      }
       let workingInfo = await Json.getJson("workingInfo");
       await setLocalObj();
       resolve(workingInfo);
