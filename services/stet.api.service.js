@@ -71,7 +71,7 @@ const setLocalObj = async () =>
         USER_SET: userSetName || "userSetTest",
       };
       localObj = tempLocalObj;
-      console.log("localObj", localObj);
+      // console.log("localObj", localObj);
       Json.updateJson("dateSetName", dateSetName);
       Json.updateJson("userSetName", localObj.USER_SET);
       resolve(localObj);
@@ -150,7 +150,7 @@ const handleError = async (userid = "") => {
     }
   } catch (e) {
     console.error(e);
-    throw Error("Error while handleError catch");
+    // throw Error("Error while handleError catch");
   }
 };
 
@@ -281,7 +281,8 @@ const handleStartApiHit = (userid, data) =>
       resolve(dateSetChunk);
     } catch (e) {
       console.error(e);
-      throw Error("Error while handleStartApiHit");
+      reject(e);
+      // throw Error("Error while handleStartApiHit");
     }
   });
 
@@ -357,7 +358,8 @@ const startApiHit = (userid, data) =>
             resolve(results);
           } catch (e) {
             console.error(e);
-            throw Error("Error while startApiHit Promise.map");
+            reject(e);
+            // throw Error("Error while startApiHit Promise.map");
           }
         })
         .catch((err) => {
@@ -365,7 +367,8 @@ const startApiHit = (userid, data) =>
         });
     } catch (e) {
       console.error(e);
-      throw Error("Error while startApiHit");
+      reject(e);
+      // throw Error("Error while startApiHit");
     }
   });
 
@@ -410,7 +413,7 @@ const runProgram = async (isPro = false) => {
     let workingInfo = await Json.getJson("workingInfo");
     const userSet = await Json.getJson("userSet");
     const dateSet = await Json.getJson("dateSet");
-    console.log("data =>>>>", userSet, dateSet);
+    // console.log("data =>>>>", userSet, dateSet);
     let userid = "";
     const userSetLen = userSet.length || 0;
     console.log("workingStatus", workingInfo["workingStatus"]);
@@ -469,7 +472,7 @@ const runProgram = async (isPro = false) => {
     return workingInfo;
   } catch (e) {
     console.error(e);
-    throw Error("Error while runProgram");
+    // throw Error("Error while runProgram");
   }
 };
 
@@ -697,7 +700,7 @@ const stetStatus = async () =>
     try {
       await setLocalObj();
       let workingInfo = await Json.getJson("workingInfo");
-      console.log("workingInfo", workingInfo);
+      // console.log("workingInfo", workingInfo);
       if (!workingInfo.dateSet && !workingInfo.userSet) {
         const workingInfoRes = await getWorkingInfo();
         workingInfo = await Json.getJson("workingInfo");
@@ -706,7 +709,23 @@ const stetStatus = async () =>
       resolve(workingInfo);
     } catch (e) {
       console.error(e);
-      throw Error("Error while stet login service fnTemplate");
+      reject(e);
+      // throw Error("Error while stet login service fnTemplate");
+    }
+  });
+
+const stetUpdateWorkingInfo = async () =>
+  new Promise(async (resolve, reject) => {
+    try {
+      await setLocalObj();
+      const workingInfoRes = await getWorkingInfo();
+      let workingInfo = await Json.getJson("workingInfo");
+      await setLocalObj();
+      resolve(workingInfo);
+    } catch (e) {
+      console.error(e);
+      reject(e);
+      // throw Error("Error while stet login service fnTemplate");
     }
   });
 
@@ -716,4 +735,5 @@ module.exports = {
   stetStop,
   stetStatus,
   stetPreStart,
+  stetUpdateWorkingInfo,
 };

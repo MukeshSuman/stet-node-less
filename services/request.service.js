@@ -1,7 +1,7 @@
-const fetch = require("node-fetch");
 const { BASE_URL, API_END_POINT } = require("../constants");
 let resStore = {};
 var { Json, convertToIST, isDateGrater } = require("../utility");
+var request = require("request");
 
 const fnTemplate = async () =>
   new Promise(async (resolve, reject) => {
@@ -18,19 +18,43 @@ const fnTemplate = async () =>
 const GetData = async (END_POINT) =>
   new Promise(async (resolve, reject) => {
     try {
-      fetch(BASE_URL + END_POINT)
-        .then((res) => {
-          console.log(res.status);
-          if (res.status === 200) {
-            return res.json();
-          } else {
-            reject(res);
+      request.get(
+        {
+          headers: { "content-type": "application/json" },
+          url: BASE_URL + END_POINT,
+          body: "",
+          // jar: cookieJar,
+        },
+        async (error, response, body) => {
+          if (error) {
+            reject(error);
           }
-        })
-        .then((body) => {
-          resolve(body.data);
-        })
-        .catch((e) => reject(e));
+          if (response.statusCode == 200 || response.statusCode == "200") {
+            if (body) {
+              let tempBody = JSON.parse(body);
+              console.log("body", tempBody.data);
+              resolve(tempBody.data);
+            } else {
+              reject({ data: body, message: response });
+            }
+          } else {
+            reject({ data: body, message: response });
+          }
+        }
+      );
+      // fetch(BASE_URL + END_POINT)
+      //   .then((res) => {
+      //     console.log(res.status);
+      //     if (res.status === 200) {
+      //       return res.json();
+      //     } else {
+      //       reject(res);
+      //     }
+      //   })
+      //   .then((body) => {
+      //     resolve(body.data);
+      //   })
+      //   .catch((e) => reject(e));
     } catch (e) {
       console.error(e);
       reject(e);
@@ -41,23 +65,47 @@ const GetData = async (END_POINT) =>
 const CreateData = async (END_POINT, data) =>
   new Promise(async (resolve, reject) => {
     try {
-      fetch(BASE_URL + END_POINT, {
-        method: "post",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" },
-      })
-        .then((res) => {
-          // console.log(res.status);
-          if (res.status === 200) {
-            return res.json();
-          } else {
-            reject(res);
+      request.post(
+        {
+          headers: { "content-type": "application/json" },
+          url: BASE_URL + END_POINT,
+          body: JSON.stringify(data),
+          // jar: cookieJar,
+        },
+        async (error, response, body) => {
+          if (error) {
+            reject(error);
           }
-        })
-        .then((body) => {
-          resolve(body.data);
-        })
-        .catch((e) => reject(e));
+          if (response.statusCode == 200 || response.statusCode == "200") {
+            if (body) {
+              let tempBody = JSON.parse(body);
+              console.log("body", tempBody.data);
+              resolve(tempBody.data);
+            } else {
+              reject({ data: body, message: response });
+            }
+          } else {
+            reject({ data: body, message: response });
+          }
+        }
+      );
+      // fetch(BASE_URL + END_POINT, {
+      //   method: "post",
+      //   body: JSON.stringify(data),
+      //   headers: { "Content-Type": "application/json" },
+      // })
+      //   .then((res) => {
+      //     // console.log(res.status);
+      //     if (res.status === 200) {
+      //       return res.json();
+      //     } else {
+      //       reject(res);
+      //     }
+      //   })
+      //   .then((body) => {
+      //     resolve(body.data);
+      //   })
+      //   .catch((e) => reject(e));
     } catch (e) {
       console.error(e);
       reject(e);

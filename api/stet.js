@@ -18,5 +18,6 @@ router.get("/start", StetController.stetStart);
 router.get("/prestart", StetController.stetPreStart);
 router.get("/stop", StetController.stetStop);
 router.get("/status", StetController.stetStatus);
+router.get("/updateworkinginfo", StetController.stetUpdateWorkingInfo);
 
 module.exports = router;

@@ -57,10 +57,22 @@ const stetPreStart = async (req, res, next) => {
   }
 };
 
+const stetUpdateWorkingInfo = async (req, res, next) => {
+  try {
+    let stetUpdateWorkingInfoRes = await StetApi.stetUpdateWorkingInfo();
+    return res
+      .status(200)
+      .json({ status: 200, data: stetUpdateWorkingInfoRes, message: "Succes" });
+  } catch (e) {
+    return res.status(400).json({ status: 400, ...e });
+  }
+};
+
 module.exports = {
   stetTest,
   stetStatus,
   stetStart,
   stetStop,
   stetPreStart,
+  stetUpdateWorkingInfo,
 };
