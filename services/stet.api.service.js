@@ -120,39 +120,34 @@ const updateLocalWorkingInfo = async (action = "") => {
   return workingInfo;
 };
 
-const handleError = async (userid = "") => {
-  try {
-    if (!inProgressHandleError) {
+const handleError = async () =>
+  new Promise(async (resolve, reject) => {
+    try {
       inProgressHandleError = true;
-      let workingInfo = Json.getJson("workingInfo");
-      workingInfo["workingStatus"] = "stop";
-      workingInfo["lastUpdate"] = convertToIST();
-      workingInfo = await Json.updateJson("workingInfo", workingInfo);
-      const workingInfoData = {
-        serverName: localObj.SERVER_NAME,
-        server: localObj.SERVER,
-        ...workingInfo,
-      };
-      await updateWorkingInfo(workingInfoData);
-      await createLog("error", workingInfo, userid);
-      // let mailer = await Mailer.sendEmail(
-      //   ["sumanm686@gmail.com"],
-      //   localObj.SERVER + " calling error ✔",
-      //   JSON.stringify(data, null, 2)
-      // );
-      setTimeout(async () => {
+      let workingInfo = await Json.getJson("workingInfo");
+      if (workingInfo && workingInfo.workingStatus === "stop") {
+        workingInfo["workingStatus"] = "stop";
+        workingInfo["lastUpdate"] = convertToIST();
+        workingInfo = await Json.updateJson("workingInfo", workingInfo);
+        const workingInfoData = {
+          serverName: localObj.SERVER_NAME,
+          server: localObj.SERVER,
+          ...workingInfo,
+        };
+        await updateWorkingInfo(workingInfoData);
+        await createLog("error", workingInfo, userid);
         inProgressHandleError = false;
-        console.log("handleError 60000");
-      }, 60000);
-      return true;
-    } else {
-      return true;
+        resolve(workingInfo);
+        console.log("handleError 1");
+      } else {
+        console.log("handleError 2");
+        resolve(workingInfo);
+      }
+    } catch (e) {
+      console.error(e);
+      reject(e);
     }
-  } catch (e) {
-    console.error(e);
-    // throw Error("Error while handleError catch");
-  }
-};
+  });
 
 const apiCall = async (data) =>
   new Promise(async (resolve, reject) => {
@@ -173,7 +168,9 @@ const apiCall = async (data) =>
           try {
             count = count + 1;
             if (error) {
-              await handleError();
+              if (!inProgressHandleError) {
+                await handleError();
+              }
               reject(error); // calling `reject` will cause the promise to fail with or without the error passed as an argument
               console.error(`Error while apiCall error - ${error}`);
               return; // and we don't want to go any further
@@ -189,7 +186,9 @@ const apiCall = async (data) =>
                 loopCount
               );
               console.log(JSON.stringify(response));
-              await handleError();
+              if (!inProgressHandleError) {
+                await handleError();
+              }
               console.error(
                 `Error while apiCall response - ${response.statusCode}`
               );
@@ -247,14 +246,20 @@ const apiCall = async (data) =>
             }
           } catch (e) {
             console.error(e);
-            await handleError();
+            if (!inProgressHandleError) {
+              await handleError();
+            }
+            // await handleError();
             reject(e); // calling `reject` will cause the promise to fail with or without the error passed as an argument
           }
         }
       );
     } catch (e) {
       console.error(e);
-      await handleError();
+      if (!inProgressHandleError) {
+        await handleError();
+      }
+      // await handleError();
       reject(e);
     }
   });
