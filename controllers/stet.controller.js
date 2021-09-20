@@ -68,6 +68,17 @@ const stetUpdateWorkingInfo = async (req, res, next) => {
   }
 };
 
+const stetCheckApi = async (req, res, next) => {
+  try {
+    let stetCheckApiRes = await StetApi.stetCheckApi();
+    return res
+      .status(200)
+      .json({ status: 200, data: stetCheckApiRes, message: "Succes" });
+  } catch (e) {
+    return res.status(400).json({ status: 400, ...e });
+  }
+};
+
 module.exports = {
   stetTest,
   stetStatus,
@@ -75,4 +86,5 @@ module.exports = {
   stetStop,
   stetPreStart,
   stetUpdateWorkingInfo,
+  stetCheckApi,
 };
