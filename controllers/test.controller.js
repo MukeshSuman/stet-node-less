@@ -4,7 +4,7 @@ var { ApiRequest } = require("../services");
 const ApiHit = async (req, res, next) => {
 	try {
 		console.log("Test Controller ApiHit");
-		let apiHitRes = await ApiRequest.requestApiHit();
+		let apiHitRes = await ApiRequest.gotApiHit();
 		console.log("apiHitRes", apiHitRes.statusCode);
 		return res
 			.status(200)
