@@ -193,9 +193,9 @@ const apiCall = async (data) =>
         {
           // headers: { "content-type": "application/x-www-form-urlencoded" },
           url: url,
-          // body: "",
+          body: "",
           jar: cookieJar,
-          formData: resFormData,
+        //   formData: resFormData,
         },
         async (error, response, body) => {
           try {
@@ -401,6 +401,7 @@ const startApiHit = (userid, data) =>
         })
         .catch((err) => {
           console.error(err);
+		  reject(err);
         });
     } catch (e) {
       console.error(e);
@@ -785,7 +786,7 @@ const stetCheckApi = async (
           url: url,
           body: "",
           jar: cookieJar,
-          formData: { ...resFormData, userid, password },
+        //   formData: { ...resFormData, userid, password },
         },
         async (error, response, body) => {
           if (error) {
