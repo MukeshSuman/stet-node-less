@@ -1,6 +1,8 @@
 "use strict";
-var StetApi = require("./stet.api.service");
+const StetApi = require("./stet.api.service");
+var ApiRequest = require("./api.request.service");
 
 module.exports = {
-  StetApi: { ...StetApi },
+	StetApi: { ...StetApi },
+	ApiRequest: { ...ApiRequest },
 };
