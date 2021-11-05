@@ -79,6 +79,7 @@ const gotApiHit = async (
 			console.log(userid, password);
 			const hitUrl = "loginAction.do?subAction=ValidateUser";
 			const url = `${baseUrl}${hitUrl}&${comData}&userid=${userid}&confData=${password}`;
+			console.log(url)
 			request.post(
 			  {
 				// headers: { "content-type": "application/x-www-form-urlencoded" },
