@@ -16,8 +16,8 @@ const {
   updateIdStatus,
 } = require("./request.service");
 
-// const baseUrl = "https://cdn3.digialm.com/EForms/";
-const baseUrl = "https://g21.digialm.com//EForms/";
+const baseUrl = "https://cdn3.digialm.com/EForms/";
+// const baseUrl = "https://g21.digialm.com//EForms/";
 const comData = "formId=66709&orgId=1631";
 const comDataObj = {
   formId: "66709",
